@@ -3,19 +3,20 @@
 {% block title %}Grimorio De Builds{% endblock %}
 
 {% block body %}
-<h1>BuildHub</h1>
+<h1>Grimorio De Builds</h1>
 
-<p>Comparte tus builds y estrategias favoritas.</p>
+<p>Selecciona un juego</p>
 
-<div>
-    <h2>Juegos disponibles</h2>
 
-    <ul>
-        <li>Hollow Knight</li>
-        <li>League of Legends</li>
-        <li>Terraria</li>
-    </ul>
-</div>
+{% for game in games %}
+
+    <div>
+        <h2>{{ game.name }}</h2>
+
+        <p>{{ game.description }}</p>
+    </div>
+
+{% endfor %}
 
 {#<style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
