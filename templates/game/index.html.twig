@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ game.name }}{% endblock %}
+
+{% block body %}
+
+<h1>{{ game.name }}</h1>
+
+<p>{{ game.description }}</p>
+
+<hr>
+
+<a href="{{ path('app_game_build_new', {'slug': game.slug}) }}">
+    Crear Build
+</a>
+
+|
+
+<a href="{{ path('game_forum', {'slug': game.slug}) }}">
+    Foro
+</a>
+
+<hr>
+
+<h2>Builds</h2>
+
+{% for build in builds %}
+
+    <div>
+
+        <h3><a href="{{ path('app_build_show', {'id': build.id}) }}">
+        {{ build.title }}</a></h3>
+
+        <p>{{ build.description }}</p>
+
+    </div>
+
+{% else %}
+
+    <p>No hay builds todavía.</p>
+
+{% endfor %}
+
+{% endblock %}

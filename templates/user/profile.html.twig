@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Perfil {{ user.username }}
+{% endblock %}
+
+{% block body %}
+
+<div>
+    <img
+        src="{{ asset('uploads/banners/' ~ user.banner) }}"
+        alt="Banner"
+        style="width:100%; height:250px; object-fit:cover;"
+    >
+</div>
+
+<div style="margin-top:-60px; margin-left:20px;">
+    <img
+        src="{{ asset('uploads/avatars/' ~ user.avatar) }}"
+        alt="Avatar"
+        width="120"
+        height="120"
+        style="border-radius:50%; border:4px solid white; object-fit:cover;"
+    >
+</div>
+
+<h1>Perfil de {{ user.username }}</h1>
+
+{% if user.bio %}
+    <p>{{ user.bio }}</p>
+{% endif %}
+
+<hr>
+
+<h2>Builds</h2>
+
+{% for build in user.builds %}
+
+    <div>
+        <h3>
+            <a href="{{ path('app_build_show', {'id': build.id}) }}">
+                {{ build.title }}
+            </a>
+        </h3>
+        <p>{{ build.description }}</p>
+    </div>
+
+{% else %}
+    <p>No tiene builds</p>
+{% endfor %}
+
+<hr>
+
+<h2>Posts</h2>
+
+{% for post in user.posts %}
+
+    <div>
+        <h3>
+            <a href="{{ path('app_post_show', {'id': post.id}) }}">
+                {{ post.title }}
+            </a>
+        </h3>
+        <p>{{ post.content|slice(0, 100) }}...</p>
+    </div>
+
+{% else %}
+    <p>No tiene posts</p>
+{% endfor %}
+
+<hr>
+
+<h2>Comentarios</h2>
+
+{% for comment in user.comments %}
+
+    <div>
+        <p>{{ comment.content }}</p>
+        <small>{{ comment.createdAt|date('d/m/Y H:i') }}</small>
+    </div>
+
+{% else %}
+    <p>No tiene comentarios</p>
+{% endfor %}
+
+{% endblock %}

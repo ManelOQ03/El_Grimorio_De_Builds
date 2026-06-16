@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ build.title }}
+{% endblock %}
+
+{% block body %}
+
+<h1>{{ build.title }}</h1>
+
+<p>
+    Juego:
+    {{ build.game.name }}
+</p>
+
+<p>
+    Autor:
+    {{ build.user.username }}
+</p>
+
+<p>
+    {{ build.description }}
+</p>
+
+<p>
+    Creada:
+    {{ build.createdAt|date('d/m/Y H:i') }}
+</p>
+
+<a href="{{ path('game_show', {'slug': build.game.slug}) }}">
+    Volver al juego
+</a>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Build index{% endblock %}
+
+{% block body %}
+    <h1>Build index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for build in builds %}
+            <tr>
+                <td>{{ build.id }}</td>
+                <td>{{ build.title }}</td>
+                <td>{{ build.description }}</td>
+                <td>{{ build.image }}</td>
+                <td>{{ build.createdAt ? build.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_build_show', {'id': build.id}) }}">show</a>
+                    <a href="{{ path('app_build_edit', {'id': build.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_build_new') }}">Create new</a>
+{% endblock %}

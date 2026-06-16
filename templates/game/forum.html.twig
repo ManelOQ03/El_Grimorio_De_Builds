@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Foro {{ game.name }}
+{% endblock %}
+
+{% block body %}
+
+<h1>Foro {{ game.name }}</h1>
+
+<a href="{{ path('app_game_post_new', {'slug': game.slug}) }}">
+    Crear Post
+</a>
+
+<hr>
+
+{% for post in posts %}
+
+    <div>
+
+        <h3><a href="{{ path('app_post_show', {'id': post.id}) }}">
+        {{ post.title }}</a></h3>
+
+        <p>{{ post.content|slice(0,150) }}...</p>
+
+    </div>
+
+{% else %}
+
+    <p>No hay posts todavía.</p>
+
+{% endfor %}
+
+{% endblock %}
