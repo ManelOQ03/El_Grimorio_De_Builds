@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Editar comentario
+{% endblock %}
+
+{% block body %}
+
+<h1>Editar comentario</h1>
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button>Guardar cambios</button>
+{{ form_end(form) }}
+
+{% endblock %}

@@ -4,6 +4,15 @@
     Foro {{ game.name }}
 {% endblock %}
 
+{% block banner %}
+    <div class="game-banner">
+        <img
+            src="/uploads/banners/{{ game.bannerImage }}"
+            alt="{{ game.name }}"
+        >
+    </div>
+{% endblock %}
+
 {% block body %}
 
 <h1>Foro {{ game.name }}</h1>
@@ -13,6 +22,20 @@
 </a>
 
 <hr>
+
+<div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center;">
+
+    <a href="{{ path('game_forum', {'slug': game.slug, 'sort': 'new', 'page': 1}) }}"
+       style="padding: 6px 12px; border: 1px solid #ccc; border-radius: 6px; text-decoration: none; background: {% if sort == 'new' %}#eee{% else %}transparent{% endif %};">
+        🆕 Nuevos
+    </a>
+
+    <a href="{{ path('game_forum', {'slug': game.slug, 'sort': 'top', 'page': 1}) }}"
+       style="padding: 6px 12px; border: 1px solid #ccc; border-radius: 6px; text-decoration: none; background: {% if sort == 'top' %}#eee{% else %}transparent{% endif %};">
+        🔥 Top
+    </a>
+
+</div>
 
 {% for post in posts %}
 
@@ -31,4 +54,8 @@
 
 {% endfor %}
 
+{{ knp_pagination_render(posts, null, {}, {
+    'sort': sort,
+    'slug': game.slug
+}) }}
 {% endblock %}

@@ -2,6 +2,15 @@
 
 {% block title %}{{ game.name }}{% endblock %}
 
+{% block banner %}
+    <div class="game-banner">
+        <img
+            src="/uploads/banners/{{ game.bannerImage }}"
+            alt="{{ game.name }}"
+        >
+    </div>
+{% endblock %}
+
 {% block body %}
 
 <h1>{{ game.name }}</h1>

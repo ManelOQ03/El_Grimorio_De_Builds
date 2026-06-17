@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/post')]
 final class PostController extends AbstractController
@@ -26,25 +28,7 @@ final class PostController extends AbstractController
         ]);
     }
 
-    /* #[Route('/new', name: 'app_post_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $post = new Post();
-        $form = $this->createForm(PostType::class, $post);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($post);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('post/new.html.twig', [
-            'post' => $post,
-            'form' => $form,
-        ]);
-    } */
 
     #[Route('/game/{slug}/post/new', name: 'app_game_post_new')]
     public function newForGame( string $slug, Request $request, EntityManagerInterface $entityManager, GameRepository $gameRepository ): Response
@@ -70,6 +54,9 @@ final class PostController extends AbstractController
                 new \DateTimeImmutable()
             );
 
+            $post->setLikes(0);
+            $post->setDislikes(0);
+
             $post->setUser(
                 $this->getUser()
             );
@@ -77,6 +64,20 @@ final class PostController extends AbstractController
             $post->setGame(
                 $game
             );
+
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile instanceof UploadedFile) {
+
+                $imageName = uniqid().'.'.$imageFile->guessExtension();
+
+                $imageFile->move(
+                    $this->getParameter('kernel.project_dir').'/public/uploads/posts',
+                $imageName
+            );
+
+                $post->setImage($imageName);
+            }
 
             $entityManager->persist($post);
             $entityManager->flush();
@@ -133,14 +134,6 @@ final class PostController extends AbstractController
         ]);
     }
 
-    /*#[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
-    public function show(Post $post): Response
-    {
-        return $this->render('post/show.html.twig', [
-            'post' => $post,
-        ]);
-    }*/
-
     #[Route('/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
@@ -154,6 +147,9 @@ final class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $post->setUpdatedAt(
+                new \DateTimeImmutable()
+            );
             $entityManager->flush();
 
             return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
@@ -168,9 +164,12 @@ final class PostController extends AbstractController
     #[Route('/{id}', name: 'app_post_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($post->getUser() !== $this->getUser()) {
+        if (
+            $post->getUser() !== $this->getUser()
+            && !$this->isGranted('ROLE_ADMIN')
+        ) {
             throw $this->createAccessDeniedException();
         }
 

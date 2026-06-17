@@ -42,6 +42,15 @@ class Post
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post')]
     private Collection $comments;
 
+    #[ORM\Column]
+    private int $likes = 0;
+
+    #[ORM\Column]
+    private int $dislikes = 0;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -150,6 +159,42 @@ class Post
                 $comment->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLikes(): int
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(int $likes): static
+    {
+        $this->likes = $likes;
+
+        return $this;
+    }
+
+    public function getDislikes(): int
+    {
+        return $this->dislikes;
+    }
+
+    public function setDislikes(int $dislikes): static
+    {
+        $this->dislikes = $dislikes;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

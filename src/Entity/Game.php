@@ -43,6 +43,9 @@ class Game
     #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'game')]
     private Collection $posts;
 
+    #[ORM\Column(length: 255)]
+    private ?string $bannerImage = null;
+
     public function __construct()
     {
         $this->builds = new ArrayCollection();
@@ -170,6 +173,18 @@ class Game
                 $post->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBannerImage(): ?string
+    {
+        return $this->bannerImage;
+    }
+
+    public function setBannerImage(string $bannerImage): static
+    {
+        $this->bannerImage = $bannerImage;
 
         return $this;
     }

@@ -38,4 +38,7 @@
     </table>
 
     <a href="{{ path('app_post_new') }}">Create new</a>
+    <div class="pagination">
+        {{ knp_pagination_render(posts) }}
+    </div>
 {% endblock %}

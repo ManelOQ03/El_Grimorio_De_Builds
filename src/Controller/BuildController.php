@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[Route('/build')]
 final class BuildController extends AbstractController
@@ -87,6 +88,20 @@ final class BuildController extends AbstractController
             $build->setGame(
                 $game
             );
+
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile instanceof UploadedFile) {
+
+                $imageName = uniqid().'.'.$imageFile->guessExtension();
+
+                $imageFile->move(
+                    $this->getParameter('kernel.project_dir').'/public/uploads/builds',
+                    $imageName
+                );
+
+                $build->setImage($imageName);
+            }
 
             $entityManager->persist($build);
             $entityManager->flush();

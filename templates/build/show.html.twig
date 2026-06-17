@@ -4,6 +4,15 @@
     {{ build.title }}
 {% endblock %}
 
+{% block banner %}
+    <div class="game-banner">
+        <img
+            src="/uploads/banners/{{ build.game.bannerImage }}"
+            alt="{{ build.game.name }}"
+        >
+    </div>
+{% endblock %}
+
 {% block body %}
 
 <h1>{{ build.title }}</h1>
@@ -26,6 +35,12 @@
     Creada:
     {{ build.createdAt|date('d/m/Y H:i') }}
 </p>
+
+<br>
+
+{% if build.image %}
+    <img src="/uploads/builds/{{ build.image }}" alt="">
+{% endif %}
 
 <a href="{{ path('game_show', {'slug': build.game.slug}) }}">
     Volver al juego

@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Form\CommentType;
+use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,9 +52,12 @@ class CommentController extends AbstractController
     #[Route('/{id}/delete', name: 'comment_delete')]
     public function delete( Comment $comment, EntityManagerInterface $entityManager ): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($comment->getUser() !== $this->getUser()) {
+        if (
+            $comment->getUser() !== $this->getUser()
+            && !$this->isGranted('ROLE_ADMIN')
+        ) {
             throw $this->createAccessDeniedException();
         }
 
@@ -65,6 +70,47 @@ class CommentController extends AbstractController
             'app_post_show',
             [
                 'id' => $postId
+            ]
+        );
+    }
+
+    #[Route('/{id}/edit', name: 'comment_edit')]
+    public function edit( Comment $comment, Request $request, EntityManagerInterface $entityManager ): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        
+        if ($comment->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $form = $this->createForm(
+            CommentType::class,
+            $comment
+        );
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $comment->setUpdatedAt(
+                new \DateTimeImmutable()
+            );
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute(
+                'app_post_show',
+                [
+                    'id' => $comment->getPost()->getId()
+                ]
+            );
+        }
+
+        return $this->render(
+            'comment/edit.html.twig',
+            [
+                'form' => $form,
+                'comment' => $comment
             ]
         );
     }
