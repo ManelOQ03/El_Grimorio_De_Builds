@@ -23,7 +23,8 @@
 
         <span>🎮 {{ build.game.name }}</span>
 
-        <span>👤 {{ build.user.username }}</span>
+        <span>👤 <a href="{{ path('user_profile', {'username': build.user.username}) }}"> {{ build.user.username }}
+</a></span>
 
         <span>📅 {{ build.createdAt|date('d/m/Y H:i') }}</span>
 
@@ -48,7 +49,43 @@
 
     </div>
 
+    
+    {% if app.user and (app.user == build.user or is_granted('ROLE_ADMIN')) %}
+
+    <div class="post-actions">
+
+        <a href="{{ path('app_build_edit', {'id': build.id}) }}">
+            ✏️ Editar
+        </a>
+
+        <form
+            method="post"
+            action="{{ path('app_build_delete', {'id': build.id}) }}"
+            onsubmit="return confirm('¿Seguro que quieres eliminar esta build?');"
+        >
+
+            <input
+                type="hidden"
+                name="_token"
+                value="{{ csrf_token('delete' ~ build.id) }}"
+            >
+
+            <button
+                type="submit"
+                class="danger"
+            >
+                🗑️ Eliminar
+            </button>
+
+        </form>
+
+    </div>
+
     <br>
+
+<br>
+
+{% endif %}
 
     <a
         class="btn-primary"

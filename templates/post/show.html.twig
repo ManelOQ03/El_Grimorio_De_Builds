@@ -22,7 +22,7 @@
 
     <p class="post-meta">
 
-        👤 <strong>{{ post.user.username }}</strong>
+        👤 <strong> <a href="{{ path('user_profile', {'username': post.user.username}) }}"> {{ post.user.username }} </a></strong>
 
         ·
 
@@ -166,7 +166,7 @@ href="{{ path('game_forum', {'slug': post.game.slug}) }}">
 
 <p>
 
-Todavía no hay comentarios.
+Todavía no hay comentarios.Autor
 
 </p>
 
