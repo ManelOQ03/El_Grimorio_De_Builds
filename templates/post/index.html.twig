@@ -2,6 +2,15 @@
 
 {% block title %}Post index{% endblock %}
 
+{% block banner %}
+    <div class="game-banner">
+        <img
+            src="/uploads/banners/{{ game.bannerImage }}"
+            alt="{{ game.name }}"
+        >
+    </div>
+{% endblock %}
+
 {% block body %}
     <h1>Post index</h1>
 

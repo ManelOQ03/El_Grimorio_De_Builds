@@ -5,12 +5,13 @@
 {% endblock %}
 
 {% block body %}
-
+<div class="form-box">
 <h1>Editar comentario</h1>
 
 {{ form_start(form) }}
     {{ form_widget(form) }}
     <button>Guardar cambios</button>
 {{ form_end(form) }}
+</div>
 
 {% endblock %}

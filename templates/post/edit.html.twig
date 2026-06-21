@@ -2,12 +2,23 @@
 
 {% block title %}Edit Post{% endblock %}
 
+{% block banner %}
+    <div class="game-banner">
+        <img
+            src="/uploads/banners/{{ game.bannerImage }}"
+            alt="{{ game.name }}"
+        >
+    </div>
+{% endblock %}
+
 {% block body %}
-    <h1>Edit Post</h1>
+<div class="form-box">
+    <h1>Editar la Publicación</h1>
 
     {{ include('post/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_post_index') }}">back to list</a>
+    <a href="{{ path('app_post_index') }}">Vuelve a la lista</a>
 
     {{ include('post/_delete_form.html.twig') }}
+</div>
 {% endblock %}

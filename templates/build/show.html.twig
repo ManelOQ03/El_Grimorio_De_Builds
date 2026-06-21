@@ -5,45 +5,58 @@
 {% endblock %}
 
 {% block banner %}
-    <div class="game-banner">
-        <img
-            src="/uploads/banners/{{ build.game.bannerImage }}"
-            alt="{{ build.game.name }}"
-        >
-    </div>
+<div class="game-banner">
+    <img
+        src="/uploads/banners/{{ build.game.bannerImage }}"
+        alt="{{ build.game.name }}"
+    >
+</div>
 {% endblock %}
 
 {% block body %}
 
-<h1>{{ build.title }}</h1>
+<div class="build-show">
 
-<p>
-    Juego:
-    {{ build.game.name }}
-</p>
+    <h1>{{ build.title }}</h1>
 
-<p>
-    Autor:
-    {{ build.user.username }}
-</p>
+    <div class="build-meta">
 
-<p>
-    {{ build.description }}
-</p>
+        <span>🎮 {{ build.game.name }}</span>
 
-<p>
-    Creada:
-    {{ build.createdAt|date('d/m/Y H:i') }}
-</p>
+        <span>👤 {{ build.user.username }}</span>
 
-<br>
+        <span>📅 {{ build.createdAt|date('d/m/Y H:i') }}</span>
 
-{% if build.image %}
-    <img src="/uploads/builds/{{ build.image }}" alt="">
-{% endif %}
+    </div>
 
-<a href="{{ path('game_show', {'slug': build.game.slug}) }}">
-    Volver al juego
-</a>
+    {% if build.image %}
+
+        <div class="build-image">
+
+            <img
+                src="/uploads/builds/{{ build.image }}"
+                alt="{{ build.title }}"
+            >
+
+        </div>
+
+    {% endif %}
+
+    <div class="build-description">
+
+        {{ build.description|nl2br }}
+
+    </div>
+
+    <br>
+
+    <a
+        class="btn-primary"
+        href="{{ path('game_show', {'slug': build.game.slug}) }}"
+    >
+        ← Volver al juego
+    </a>
+
+</div>
 
 {% endblock %}

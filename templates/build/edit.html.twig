@@ -2,12 +2,24 @@
 
 {% block title %}Edit Build{% endblock %}
 
+{% block banner %}
+    <div class="game-banner">
+        <img
+            src="/uploads/banners/{{ game.bannerImage }}"
+            alt="{{ game.name }}"
+        >
+    </div>
+{% endblock %}
+
 {% block body %}
-    <h1>Edit Build</h1>
+<div class="form-box">
+    <h1>Editar Build</h1>
 
     {{ include('build/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_build_index') }}">back to list</a>
+    <a href="{{ path('app_build_index') }}">Vuelve a la lista</a>
 
     {{ include('build/_delete_form.html.twig') }}
+
+</div>
 {% endblock %}

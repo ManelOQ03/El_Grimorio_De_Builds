@@ -25,7 +25,14 @@ final class GameController extends AbstractController
 
         return $this->render('game/index.html.twig', [
             'game' => $game,
+            'authorsCount' => count(array_unique(
+                array_map(
+                    fn($build) => $build->getUser()->getId(),
+                    $game->getBuilds()->toArray()
+                )
+            )),
             'builds' => $game->getBuilds()
+            
         ]);
     }
     

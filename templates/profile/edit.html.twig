@@ -2,7 +2,37 @@
 
 {% block title %}Editar perfil{% endblock %}
 
+{% block banner %}
+    
+<div>
+    <img
+        src="{{ asset('uploads/banners/' ~ app.user.banner) }}"
+        alt="Banner"
+        style="width:100%; height:250px; object-fit:cover;"
+    >
+</div>
+
+<div style="margin-top:-60px; margin-left:20px;">
+    <img
+        src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}"
+        alt="Avatar"
+        width="120"
+        height="120"
+        style="border-radius:50%; border:4px solid white; object-fit:cover;"
+    >
+</div>
+
+<h1>Perfil de {{ app.user.username }}</h1>
+
+{% if app.user.bio %}
+    <p>{{ app.user.bio }}</p>
+{% endif %}
+
+{% endblock %}
+
 {% block body %}
+
+<div class="form-box">
 
 <h1>Editar perfil</h1>
 
@@ -16,4 +46,5 @@
     </button>
 {{ form_end(form) }}
 
+</div>
 {% endblock %}

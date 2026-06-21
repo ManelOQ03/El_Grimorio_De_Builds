@@ -5,150 +5,193 @@
 {% endblock %}
 
 {% block banner %}
-    <div class="game-banner">
-        <img
-            src="/uploads/banners/{{ post.game.bannerImage }}"
-            alt="{{ post.game.name }}"
-        >
-    </div>
+<div class="game-banner">
+    <img src="/uploads/banners/{{ post.game.bannerImage }}" alt="{{ post.game.name }}">
+</div>
 {% endblock %}
 
 {% block body %}
 
-<h1>{{ post.title }}</h1>
+<div class="post-card">
 
-<p>
-    Juego:
-    {{ post.game.name }}
-</p>
+    <span class="badge-game">
+        🎮 {{ post.game.name }}
+    </span>
 
-<p>
-    Autor:
-    {{ post.user.username }}
-</p>
+    <h1>{{ post.title }}</h1>
 
-<p>
-    {{ post.content }}
-</p>
+    <p class="post-meta">
 
-{% if post.image %}
-    <img src="/uploads/posts/{{ post.image }}" alt="">
-{% endif %}
+        👤 <strong>{{ post.user.username }}</strong>
 
-<p>
-    Creado:
-    {{ post.createdAt|date('d/m/Y H:i') }}
+        ·
 
-    {% if post.updatedAt %}
-        (Editado {{ post.updatedAt|date('d/m/Y H:i') }})
+        {{ post.createdAt|date('d/m/Y H:i') }}
+
+        {% if post.updatedAt %}
+            · ✏️ Editado {{ post.updatedAt|date('d/m/Y H:i') }}
+        {% endif %}
+
+    </p>
+
+    <hr>
+
+    <p class="post-content">
+
+        {{ post.content }}
+
+    </p>
+
+    {% if post.image %}
+
+        <img
+            class="post-image"
+            src="/uploads/posts/{{ post.image }}"
+            alt=""
+        >
+
     {% endif %}
-</p>
 
-<div class="post-actions">
+    <div class="post-actions">
 
-    <a href="{{ path('post_like', {'id': post.id}) }}">
-        👍 {{ post.likes }}
-    </a>
-
-    <a href="{{ path('post_dislike', {'id': post.id}) }}">
-        👎 {{ post.dislikes }}
-    </a>
-
-    {% if app.user and (app.user == post.user or is_granted('ROLE_ADMIN')) %}
-
-        <a href="{{ path('app_post_edit', {'id': post.id}) }}">
-            ✏️ Editar
+        <a href="{{ path('post_like', {'id': post.id}) }}">
+            👍 {{ post.likes }}
         </a>
 
-        <form
-            method="post"
-            action="{{ path('app_post_delete', {'id': post.id}) }}"
-            onsubmit="return confirm('¿Seguro que quieres borrar este post?');"
-        >
-            <input type="hidden"
-                   name="_token"
-                   value="{{ csrf_token('delete' ~ post.id) }}">
+        <a href="{{ path('post_dislike', {'id': post.id}) }}">
+            👎 {{ post.dislikes }}
+        </a>
 
-            <button type="submit" class="danger">
-                🗑️ Eliminar
-            </button>
-        </form>
+        {% if app.user and (app.user == post.user or is_granted('ROLE_ADMIN')) %}
 
-    {% endif %}
+            <a href="{{ path('app_post_edit', {'id': post.id}) }}">
+                ✏️ Editar
+            </a>
+
+            <form
+                method="post"
+                action="{{ path('app_post_delete', {'id': post.id}) }}"
+                style="display:inline;"
+                onsubmit="return confirm('¿Eliminar publicación?');"
+            >
+
+                <input
+                    type="hidden"
+                    name="_token"
+                    value="{{ csrf_token('delete' ~ post.id) }}"
+                >
+
+                <button class="danger">
+                    🗑 Eliminar
+                </button>
+
+            </form>
+
+        {% endif %}
+
+    </div>
 
 </div>
 
-<hr>
+<br>
 
-<a href="{{ path('game_forum', {'slug': post.game.slug}) }}">
-    Volver al foro
+<a class="btn-small"
+href="{{ path('game_forum', {'slug': post.game.slug}) }}">
+
+← Volver al foro
+
 </a>
 
 <hr>
 
-<h2>Comentarios</h2>
+<h2>
+
+💬 Comentarios ({{ comments|length }})
+
+</h2>
 
 {% for comment in comments %}
 
-    <div>
+<div class="comment">
 
-        <strong>
-            {{ comment.user.username }}
-        </strong>
+    <strong>
 
-        <p>
-            {{ comment.content }}
-        </p>
+        👤 {{ comment.user.username }}
 
-        <small>
-            {{ comment.createdAt|date('d/m/Y H:i') }}
+    </strong>
 
-            {% if comment.updatedAt %}
-                (Editado {{ comment.updatedAt|date('d/m/Y H:i') }})
-            {% endif %}
-        </small>
+    <small>
 
-        <br><br>
+        {{ comment.createdAt|date('d/m/Y H:i') }}
 
-        <div class="post-actions">
+        {% if comment.updatedAt %}
+            · ✏️ Editado
+        {% endif %}
 
-            <a href="{{ path('comment_like', {'id': comment.id}) }}">
-                👍 {{ comment.likes }}
+    </small>
+
+    <p>
+
+        {{ comment.content }}
+
+    </p>
+
+    <div class="post-actions">
+
+        <a href="{{ path('comment_like', {'id': comment.id}) }}">
+            👍 {{ comment.likes }}
+        </a>
+
+        <a href="{{ path('comment_dislike', {'id': comment.id}) }}">
+            👎 {{ comment.dislikes }}
+        </a>
+
+        {% if app.user and (app.user == comment.user or is_granted('ROLE_ADMIN')) %}
+
+            <a href="{{ path('comment_edit', {'id': comment.id}) }}">
+                ✏️ Editar
             </a>
 
-            <a href="{{ path('comment_dislike', {'id': comment.id}) }}">
-                👎 {{ comment.dislikes }}
+            <a href="{{ path('comment_delete', {'id': comment.id}) }}">
+                🗑 Eliminar
             </a>
 
-            {% if app.user and (app.user == comment.user or is_granted('ROLE_ADMIN')) %}
-
-                <a href="{{ path('comment_edit', {'id': comment.id}) }}">
-                    ✏️ Editar
-                </a>
-
-                <a href="{{ path('comment_delete', {'id': comment.id}) }}" class="danger">
-                🗑️ Eliminar
-                </a>
-
-            {% endif %}
-
-        </div>
+        {% endif %}
 
     </div>
 
-    <hr>
+</div>
 
 {% else %}
 
-    <p>No hay comentarios todavía.</p>
+<p>
+
+Todavía no hay comentarios.
+
+</p>
 
 {% endfor %}
 
-<h3>Escribir comentario</h3>
+<div class="form-box">
+
+<h2>
+
+Añadir comentario
+
+</h2>
 
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button>Enviar</button>
+
+{{ form_widget(form) }}
+
+<button>
+
+Publicar comentario
+
+</button>
+
 {{ form_end(form) }}
+
+</div>
 
 {% endblock %}

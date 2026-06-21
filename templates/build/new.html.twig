@@ -2,10 +2,23 @@
 
 {% block title %}New Build{% endblock %}
 
+{% block banner %}
+    <div class="game-banner">
+        <img
+            src="/uploads/banners/{{ game.bannerImage }}"
+            alt="{{ game.name }}"
+        >
+    </div>
+{% endblock %}
+
 {% block body %}
-    <h1>Create new Build</h1>
+<div class="form-box">
+
+    <h1>Crear Nueva Build</h1>
 
     {{ include('build/_form.html.twig') }}
 
-    <a href="{{ path('app_build_index') }}">back to list</a>
+    <a href="{{ path('app_build_index') }}">Vuelve a la lista</a>
+</div>
+
 {% endblock %}

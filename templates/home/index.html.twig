@@ -3,45 +3,122 @@
 {% block title %}Grimorio De Builds{% endblock %}
 
 {% block banner %}
-    <div class="main-banner">
-        <img src="{{ asset('images/banner-default.jpg') }}" alt="Grimorio de Builds">
-    </div>
+<div class="main-banner">
+    <img src="{{ asset('images/banner-default.jpg') }}" alt="Grimorio de Builds">
+</div>
 {% endblock %}
 
 {% block body %}
-<h1>Grimorio De Builds</h1>
 
+<div class="hero">
 
-<p>Selecciona un juego</p>
+    <h1>⚔️ Grimorio De Builds</h1>
+
+    <p class="hero-text">
+        Descubre las mejores builds, comparte estrategias y participa en los foros
+        de tus videojuegos favoritos.
+    </p>
+
+</div>
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-icon">🎮</div>
+        <div>
+            <h2>{{ gamesCount }}</h2>
+            <span>Juegos</span>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">⚔️</div>
+        <div>
+            <h2>{{ buildsCount }}</h2>
+            <span>Builds</span>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">📝</div>
+        <div>
+            <h2>{{ postsCount }}</h2>
+            <span>Posts</span>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">💬</div>
+        <div>
+            <h2>{{ commentsCount }}</h2>
+            <span>Comentarios</span>
+        </div>
+    </div>
+
+</div>
+
+<h2 class="section-title">🎮 Juegos disponibles</h2>
 
 <div class="games-grid">
 
 {% for game in games %}
-    <a href="{{ path('game_show', {'slug': game.slug}) }}" class="game-link">
-    <div class="card">
 
-        <h2>{{ game.name }}</h2>
+<a href="{{ path('game_show', {'slug': game.slug}) }}" class="game-link">
 
-        {% if game.coverImage %}
-            <img src="/uploads/games/{{ game.coverImage }}" alt="{{ game.name }}">
+<div class="card">
+
+    {% if game.coverImage %}
+        <img src="/uploads/games/{{ game.coverImage }}" alt="{{ game.name }}">
+    {% endif %}
+
+    <h2>{{ game.name }}</h2>
+
+    <p>
+
+        {{ game.description|slice(0,110) }}
+
+        {% if game.description|length > 110 %}
+            ...
         {% endif %}
 
-        <p>{{ game.description }}</p>
+    </p>
 
-    </div>
+    <span class="btn-game">
+        Explorar →
+    </span>
+
+</div>
+
 </a>
+
 {% endfor %}
 
 </div>
 
 <hr>
 
+<div class="quote-box">
+
+<h2>💬 Frase del día</h2>
+
 {% if quote %}
-    <blockquote>
-        "{{ quote.text }}"
-        <br>
-        <small>- {{ quote.author }}</small>
-    </blockquote>
+
+<blockquote>
+
+"{{ quote.text }}"
+
+<br><br>
+
+<strong>
+
+— {{ quote.author }}
+
+</strong>
+
+</blockquote>
+
 {% endif %}
+
+</div>
 
 {% endblock %}

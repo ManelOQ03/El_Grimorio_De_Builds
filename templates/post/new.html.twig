@@ -2,10 +2,21 @@
 
 {% block title %}New Post{% endblock %}
 
+{% block banner %}
+    <div class="game-banner">
+        <img
+            src="/uploads/banners/{{ game.bannerImage }}"
+            alt="{{ game.name }}"
+        >
+    </div>
+{% endblock %}
+
 {% block body %}
-    <h1>Create new Post</h1>
+<div class="form-box">
+    <h1>Crear nueva Publicación</h1>
 
     {{ include('post/_form.html.twig') }}
 
-    <a href="{{ path('app_post_index') }}">back to list</a>
+    <a href="{{ path('app_post_index') }}">Vuelve a la lista</a>
+    </div>
 {% endblock %}

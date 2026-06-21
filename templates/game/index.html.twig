@@ -1,53 +1,131 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ game.name }}{% endblock %}
+{% block title %}
+    {{ game.name }}
+{% endblock %}
 
 {% block banner %}
-    <div class="game-banner">
-        <img
-            src="/uploads/banners/{{ game.bannerImage }}"
-            alt="{{ game.name }}"
-        >
-    </div>
+<div class="game-banner">
+    <img
+        src="/uploads/banners/{{ game.bannerImage }}"
+        alt="{{ game.name }}"
+    >
+</div>
 {% endblock %}
 
 {% block body %}
 
-<h1>{{ game.name }}</h1>
+<div class="hero">
 
-<p>{{ game.description }}</p>
+    <h1>🎮 {{ game.name }}</h1>
+
+    <p class="hero-text">
+        {{ game.description }}
+    </p>
+
+</div>
+
+<div class="game-info-bar">
+
+    <div class="game-stats">
+
+        <div class="mini-stat">
+            ⚔️
+            <strong>{{ builds|length }}</strong>
+            Builds
+        </div>
+
+        <div class="mini-stat">
+            💬
+            <strong>{{ game.posts|length }}</strong>
+            Posts
+        </div>
+
+        <div class="mini-stat">
+            👥
+            <strong>{{ authorsCount }}</strong>
+            Autores
+        </div>
+
+    </div>
+
+    <a
+        class="btn-primary"
+        href="{{ path('game_forum', {'slug': game.slug}) }}"
+    >
+        💬 Ir al Foro
+    </a>
+
+</div>
 
 <hr>
 
-<a href="{{ path('app_game_build_new', {'slug': game.slug}) }}">
-    Crear Build
-</a>
+<div class="section-header">
 
-|
+    <h2>
+        ⚔️ Builds disponibles
+    </h2>
 
-<a href="{{ path('game_forum', {'slug': game.slug}) }}">
-    Foro
-</a>
+    <a
+        class="btn-primary"
+        href="{{ path('app_game_build_new', {'slug': game.slug}) }}"
+    >
+        Crear Build
+    </a>
 
-<hr>
+</div>
 
-<h2>Builds</h2>
+<div class="build-grid">
 
 {% for build in builds %}
 
-    <div>
+    <div class="build-card">
 
-        <h3><a href="{{ path('app_build_show', {'id': build.id}) }}">
-        {{ build.title }}</a></h3>
+        <h3>
 
-        <p>{{ build.description }}</p>
+            {{ build.title }}
+
+        </h3>
+
+        <p>
+
+            {{ build.description|slice(0,180) }}
+
+            {% if build.description|length > 180 %}
+                ...
+            {% endif %}
+
+        </p>
+
+        <small>
+
+            👤 {{ build.user.username }}
+
+            ·
+
+            {{ build.createdAt|date('d/m/Y') }}
+
+        </small>
+
+        <br><br>
+
+        <a
+            class="btn-game"
+            href="{{ path('app_build_show', {'id': build.id}) }}"
+        >
+            Ver Build →
+        </a>
 
     </div>
 
 {% else %}
 
-    <p>No hay builds todavía.</p>
+    <p>
+        Todavía no hay builds para este juego.
+    </p>
 
 {% endfor %}
+
+</div>
 
 {% endblock %}

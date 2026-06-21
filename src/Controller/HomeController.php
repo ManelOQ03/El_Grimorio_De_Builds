@@ -7,11 +7,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\GameRepository;
+use App\Repository\BuildRepository;
+use App\Repository\PostRepository;
+use App\Repository\CommentRepository;
 
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(GameRepository $gameRepository, HttpClientInterface $client): Response
+    public function index(
+        GameRepository $gameRepository,
+        BuildRepository $buildRepository,
+        PostRepository $postRepository,
+        CommentRepository $commentRepository,
+        HttpClientInterface $client
+    ): Response
     {
         $games = $gameRepository->findBy([
             'isActive' => true
@@ -20,6 +29,7 @@ final class HomeController extends AbstractController
         $quote = null;
 
         try {
+
             $response = $client->request(
                 'GET',
                 'https://zenquotes.io/api/random'
@@ -33,12 +43,27 @@ final class HomeController extends AbstractController
             ];
 
         } catch (\Exception $e) {
+
             $quote = null;
+
         }
 
         return $this->render('home/index.html.twig', [
+
             'games' => $games,
-            'quote' => $quote
+
+            'quote' => $quote,
+
+            'gamesCount' => $gameRepository->count([
+                'isActive' => true
+            ]),
+
+            'buildsCount' => $buildRepository->count([]),
+
+            'postsCount' => $postRepository->count([]),
+
+            'commentsCount' => $commentRepository->count([]),
+
         ]);
     }
 }

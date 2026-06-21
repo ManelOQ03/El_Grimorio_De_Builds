@@ -39,18 +39,48 @@
 
 {% for post in posts %}
 
-    <div>
+<div class="post-card">
 
-        <h3><a href="{{ path('app_post_show', {'id': post.id}) }}">
-        {{ post.title }}</a></h3>
+    <h2>
+        <a href="{{ path('app_post_show', {'id': post.id}) }}">
+            {{ post.title }}
+        </a>
+    </h2>
 
-        <p>{{ post.content|slice(0,150) }}...</p>
+    <small>
+        👤 {{ post.user.username }}
+        ·
+        {{ post.createdAt|date('d/m/Y H:i') }}
+    </small>
+
+    <p>
+        {{ post.content|slice(0,180) }}
+
+        {% if post.content|length > 180 %}
+            ...
+        {% endif %}
+    </p>
+
+    <div class="post-footer">
+
+        <span>👍 {{ post.likes }}</span>
+
+        <span>👎 {{ post.dislikes }}</span>
+
+        <span>💬 {{ post.comments|length }}</span>
+
+        <a class="btn-small"
+           href="{{ path('app_post_show', {'id': post.id}) }}">
+            Leer publicación →
+        </a>
 
     </div>
 
+</div>
+
 {% else %}
 
-    <p>No hay posts todavía.</p>
+<p>No hay publicaciones todavía.</p>
 
 {% endfor %}
 

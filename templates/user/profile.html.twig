@@ -6,81 +6,182 @@
 
 {% block body %}
 
-<div>
+<div class="profile-banner">
+
     <img
         src="{{ asset('uploads/banners/' ~ user.banner) }}"
         alt="Banner"
-        style="width:100%; height:250px; object-fit:cover;"
     >
+
 </div>
 
-<div style="margin-top:-60px; margin-left:20px;">
+<div class="profile-header">
+
     <img
+        class="profile-avatar"
         src="{{ asset('uploads/avatars/' ~ user.avatar) }}"
         alt="Avatar"
-        width="120"
-        height="120"
-        style="border-radius:50%; border:4px solid white; object-fit:cover;"
     >
+
+    <div>
+
+        <h1>{{ user.username }}</h1>
+
+        {% if user.bio %}
+            <p class="profile-bio">
+                {{ user.bio }}
+            </p>
+        {% endif %}
+
+    </div>
+
 </div>
 
-<h1>Perfil de {{ user.username }}</h1>
+<div class="profile-stats">
 
-{% if user.bio %}
-    <p>{{ user.bio }}</p>
-{% endif %}
+    <div class="stat-box">
+
+        <h2>{{ user.builds|length }}</h2>
+
+        <span>⚔️ Builds</span>
+
+    </div>
+
+    <div class="stat-box">
+
+        <h2>{{ user.posts|length }}</h2>
+
+        <span>📝 Posts</span>
+
+    </div>
+
+    <div class="stat-box">
+
+        <h2>{{ user.comments|length }}</h2>
+
+        <span>💬 Comentarios</span>
+
+    </div>
+
+</div>
 
 <hr>
 
-<h2>Builds</h2>
+<h2>⚔️ Builds</h2>
 
 {% for build in user.builds %}
 
-    <div>
+    <div class="profile-card">
+
         <h3>
+
             <a href="{{ path('app_build_show', {'id': build.id}) }}">
+
                 {{ build.title }}
+
             </a>
+
         </h3>
-        <p>{{ build.description }}</p>
+
+        <p>
+
+            {{ build.description|slice(0,160) }}
+
+            {% if build.description|length > 160 %}
+                ...
+            {% endif %}
+
+        </p>
+
+        <small>
+
+            {{ build.createdAt|date('d/m/Y') }}
+
+        </small>
+
     </div>
 
 {% else %}
-    <p>No tiene builds</p>
+
+    <p>No tiene builds.</p>
+
 {% endfor %}
 
 <hr>
 
-<h2>Posts</h2>
+<h2>📝 Posts</h2>
 
 {% for post in user.posts %}
 
-    <div>
+    <div class="profile-card">
+
         <h3>
+
             <a href="{{ path('app_post_show', {'id': post.id}) }}">
+
                 {{ post.title }}
+
             </a>
+
         </h3>
-        <p>{{ post.content|slice(0, 100) }}...</p>
+
+        <p>
+
+            {{ post.content|slice(0,160) }}
+
+            {% if post.content|length > 160 %}
+                ...
+            {% endif %}
+
+        </p>
+
+        <small>
+
+            {{ post.createdAt|date('d/m/Y') }}
+
+        </small>
+
     </div>
 
 {% else %}
-    <p>No tiene posts</p>
+
+    <p>No tiene posts.</p>
+
 {% endfor %}
 
 <hr>
 
-<h2>Comentarios</h2>
+<h2>💬 Comentarios</h2>
 
 {% for comment in user.comments %}
 
-    <div>
-        <p>{{ comment.content }}</p>
-        <small>{{ comment.createdAt|date('d/m/Y H:i') }}</small>
+    <div class="profile-card">
+
+        <p>
+
+            {{ comment.content }}
+
+        </p>
+
+        <small>
+
+            En
+            <a href="{{ path('app_post_show', {'id': comment.post.id}) }}">
+                {{ comment.post.title }}
+            </a>
+
+            ·
+
+            {{ comment.createdAt|date('d/m/Y H:i') }}
+
+        </small>
+
     </div>
 
 {% else %}
-    <p>No tiene comentarios</p>
+
+    <p>No tiene comentarios.</p>
+
 {% endfor %}
 
 {% endblock %}
